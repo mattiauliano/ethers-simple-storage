@@ -1,5 +1,8 @@
 {
   "dependencies": {
+    "ethers": "^5.7.2",
+    "ganache": "^7.5.0",
+    "ganache-cli": "^6.12.2",
     "solc": "0.8.7-fixed"
   },
   "scripts": {
