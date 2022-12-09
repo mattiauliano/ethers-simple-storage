@@ -11,7 +11,7 @@ async function main() {
 
   // Connect a ganache account
   const wallet = new ethers.Wallet(
-    "0x12fa2277b4bb3a36dffea553ecddb59fcb1f057c7061b07bff2e5ffb894d0fa3",
+    "0x40ce3eaa97beab46c74c71046a059cfcda3f8009804a62785000c7eab0cf4902",
     provider
   );
 
@@ -23,8 +23,21 @@ async function main() {
   const contractFactory = new ethers.ContractFactory(abi, binary, wallet);
   console.log("Deploying...");
   // Deploy contract
+  // Curly braces as parameter allow us to override specific properties
   const contract = await contractFactory.deploy();
-  console.log(contract);
+  // Wait 1 block confirmation
+  await contract.deployTransaction.wait(1);
+
+  // Interact with the contract
+  const currentFavoriteNumber =  await contract.retrieve();
+  console.log(`Favorite Number: ${currentFavoriteNumber.toString()}`);
+  
+  // This is a transaction
+  const transactionResponse = await contract.store("15");
+  const transactionReceipt = await transactionResponse.wait(1);
+
+  const updatedFavoriteNumber = await contract.retrieve();
+  console.log(`Updated Favorite Number: ${updatedFavoriteNumber}`);
 }
 
 main()
