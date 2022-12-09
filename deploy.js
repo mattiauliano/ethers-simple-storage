@@ -3,17 +3,16 @@
 // Import ethers js
 const ethers = require("ethers");
 const fs = require("fs");
+// Get access to env variables
+require("dotenv").config();
 
 async function main() {
   // Ganache Test Blockchain: http://127.0.0.1:8545
   // Link script to the local blockchain
-  const provider = new ethers.providers.JsonRpcProvider("http://127.0.0.1:8545");
+  const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
 
   // Connect a ganache account
-  const wallet = new ethers.Wallet(
-    "0x40ce3eaa97beab46c74c71046a059cfcda3f8009804a62785000c7eab0cf4902",
-    provider
-  );
+  const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
 
   // Take ABI and binary code in order to interact with the contract
   const abi = fs.readFileSync("./SimpleStorage_sol_SimpleStorage.abi", "utf8");
@@ -31,7 +30,7 @@ async function main() {
   // Interact with the contract
   const currentFavoriteNumber =  await contract.retrieve();
   console.log(`Favorite Number: ${currentFavoriteNumber.toString()}`);
-  
+
   // This is a transaction
   const transactionResponse = await contract.store("15");
   const transactionReceipt = await transactionResponse.wait(1);
