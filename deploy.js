@@ -9,7 +9,9 @@ require("dotenv").config();
 async function main() {
     // Ganache Test Blockchain: http://127.0.0.1:8545
     // Link script to the local blockchain
-    const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_URL);
+    const provider = new ethers.providers.JsonRpcProvider(
+        process.env.GOERLI_RPC_URL
+    );
 
     // Connect a ganache account
     const wallet = new ethers.Wallet(process.env.PRIVATE_KEY, provider);
